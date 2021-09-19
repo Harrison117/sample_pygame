@@ -96,8 +96,12 @@ class PlayerBuilder(EntityBuilder):
         self._entity.rect = self._entity.image.get_rect()
         self._entity.rect.center = [
             self._entity.x_pos + self._entity.x_mid,
-            self._entity.y_pos + self._entity.y_mid
-        ]
+            self._entity.y_pos + self._entity.y_mid]
+
+    def setup_weapon(self, weapon_factory, default_weapon):
+        self._entity.setup_weapon(
+            weapon_factory.build_weapon(self._entity),
+            default_weapon)
 
     def build(self):
         return self._entity
@@ -113,24 +117,47 @@ class BulletBuilder(PlayerBuilder):
     def __init__(self):
         super().__init__()
         self._entity = Bullet()
-        self._owner = None
 
     def set_owner(self, entity):
-        self._owner = entity
+        self._entity.set_owner(entity)
 
     def set_init_pos(self, x_pos=-1, y_pos=-1):
         if x_pos < 0 and y_pos < 0:
-            self._entity.x_pos = self._owner.x_pos + self._owner.x_mid - self._entity.image.get_width()//2
-            self._entity.y_pos = self._owner.y_pos + self._owner.y_mid - self._entity.image.get_height()//2
+            self._entity.x_pos = \
+                self._entity.get_owner().x_pos \
+                + self._entity.get_owner().x_mid \
+                - self._entity.image.get_width()//2
+
+            self._entity.y_pos = \
+                self._entity.get_owner().y_pos \
+                + self._entity.get_owner().y_mid \
+                - self._entity.image.get_height()//2
         else:
             self._entity.x_pos = x_pos
             self._entity.y_pos = y_pos
 
+    def set_atk_spd(self, atk_spd):
+        self._entity.set_bullet_atk_spd(atk_spd)
+
+    def set_weapon_type(self, weapon_type):
+        self._entity.set_weapon_type(weapon_type)
+
     def set_sound(self, sound):
         self._entity.sound = sound
 
-    def set_atk_spd(self, atk_spd):
-        self._entity.update_bullet_atk_spd(atk_spd)
+    def build(self):
+        return self._entity
+
+
+class WeaponBuilder:
+    def __init__(self):
+        self._entity = Weapon()
+
+    def set_bullet_factory(self, bullet_factory):
+        self._entity.set_bullet_factory(bullet_factory)
+
+    def set_owner(self, owner):
+        self._entity.set_owner(owner)
 
     def build(self):
         return self._entity
