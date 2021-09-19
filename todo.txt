@@ -1,0 +1,21 @@
+Project starwish features:
+
+> semi-open world levels and mechanics (eg. puzzle, etc.)
+> better and robust movements
+> common/boss enemy weakness to various guns (to encourage weapon switching
+>b u l l e t
+h e l l (to be planned...)
+> RPG-style player stats, chance-based crit/graze/miss, entity evasion
+> enemy shields, boss phases
+> moolaaaaah!
+
+TO DO:
+- implement Weapon class
+- transfer Bullet-related functionality to Weapon
+- fire bullets from a Weapon object held by Player
+- implement entity collision detection
+- implement Stat Class
+>HP
+>DMG
+>DEF
+>AGL
