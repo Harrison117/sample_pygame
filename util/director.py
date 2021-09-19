@@ -74,7 +74,7 @@ class BulletCreator:
         builder.set_init_mov_accel((1, 0))
         builder.set_mov_spd(25.0)
         builder.set_init_state()
-        builder.set_atk_spd(0.1)
+        builder.set_atk_spd(0.08)
         builder.set_sound(pygame.mixer.Sound('fire2.wav'))
         return builder.build()
 
