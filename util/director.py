@@ -1,8 +1,26 @@
-import pygame
 import random
-from util.pygame_config import SCREEN_WIDTH, SCREEN_HEIGHT
-from util.builder import PlayerBuilder, EnemyBuilder, BulletBuilder, WeaponBuilder
+
+import pygame
+
+from util.pygame_config import *
+from util.builder import *
 from util.enums import WeaponType
+
+
+class StatusBarCreator:
+    SMALL_TYPE_HEIGHT = 3
+
+    @staticmethod
+    def build_hp_bar(entity):
+        builder = StatusBarBuilder()
+        builder.set_owner(entity)
+        builder.set_color(pygame.Color(0, 255, 0))
+        builder.set_pos(
+            (entity.get_x_pos(), entity.get_y_pos()),
+            y_off=-StatusBarCreator.SMALL_TYPE_HEIGHT)
+        builder.set_size(
+            (entity.get_width(), StatusBarCreator.SMALL_TYPE_HEIGHT))
+        return builder.build()
 
 
 class PlayerCreator:
@@ -10,7 +28,8 @@ class PlayerCreator:
     def build_player():
         builder = PlayerBuilder()
         builder.set_name("player")
-        builder.set_pygame_img(pygame.image.load('player.png'))
+        builder.set_pygame_img(
+            pygame.image.load(get_asset_path('sprites/player.png')))
         builder.set_init_pos_offset((6, 2))
         builder.set_init_pos()
         builder.set_init_mov_accel((0, 0))
@@ -23,7 +42,8 @@ class PlayerCreator:
 class EnemyCreator:
     @staticmethod
     def build_basic_enemy():
-        img = pygame.image.load('enemy.png')
+        img = pygame.image.load(
+            get_asset_path('sprites/enemy.png'))
         img_x_mid = img.get_width() // 2
         pos_offset = (6, 2)
         builder = EnemyBuilder()
@@ -37,6 +57,7 @@ class EnemyCreator:
              random.choice([-1, 1])))
         builder.set_mov_spd(2)
         builder.set_hit_box()
+        builder.setup_hp_bar(StatusBarCreator())
         return builder.build()
 
 
@@ -51,17 +72,23 @@ class WeaponCreator:
 
 class BulletCreator:
     @staticmethod
-    def build_player_basic_bullet(entity):
-        builder = BulletBuilder()
+    def build_player_basic_bullet(entity,
+                                  builder=BulletBuilder(),
+                                  def_image=pygame.image.load(get_asset_path('sprites/player_basic_bullet.png')),
+                                  def_sound=pygame.mixer.Sound(get_asset_path('sounds/fire1.wav')),
+                                  def_weapon_type=WeaponType.BASIC, def_accel=(1, 0), def_mov_spd=10.0,
+                                  def_dmg=5.0, def_atk_spd=0.2):
         builder.set_owner(entity)
-        builder.set_weapon_type(WeaponType.BASIC)
-        builder.set_pygame_img(pygame.image.load('player_basic_bullet.png'))
+        builder.set_weapon_type(def_weapon_type)
+        builder.set_pygame_img(def_image)
         builder.set_init_pos()
-        builder.set_init_mov_accel((1, 0))
-        builder.set_mov_spd(10.0)
+        builder.set_init_mov_accel(def_accel)
+        builder.set_mov_spd(def_mov_spd)
         builder.set_init_state()
-        builder.set_atk_spd(0.2)
-        builder.set_sound(pygame.mixer.Sound('fire1.wav'))
+        builder.set_dmg(def_dmg)
+        builder.set_atk_spd(def_atk_spd)
+        builder.set_hit_box()
+        builder.set_sound(def_sound)
         return builder.build()
 
     @staticmethod
@@ -69,13 +96,17 @@ class BulletCreator:
         builder = BulletBuilder()
         builder.set_owner(entity)
         builder.set_weapon_type(WeaponType.MINI)
-        builder.set_pygame_img(pygame.image.load('player_mini_bullet.png'))
+        builder.set_pygame_img(
+            pygame.image.load(get_asset_path('sprites/player_mini_bullet.png')))
         builder.set_init_pos()
         builder.set_init_mov_accel((1, 0))
-        builder.set_mov_spd(25.0)
+        builder.set_mov_spd(20.0)
         builder.set_init_state()
+        builder.set_dmg(1.0)
         builder.set_atk_spd(0.08)
-        builder.set_sound(pygame.mixer.Sound('fire2.wav'))
+        builder.set_hit_box()
+        builder.set_sound(
+            pygame.mixer.Sound(get_asset_path('sounds/fire2.wav')))
         return builder.build()
 
     @staticmethod
@@ -83,13 +114,17 @@ class BulletCreator:
         builder = BulletBuilder()
         builder.set_owner(entity)
         builder.set_weapon_type(WeaponType.MISSILE)
-        builder.set_pygame_img(pygame.image.load('player_missile_bullet.png'))
+        builder.set_pygame_img(
+            pygame.image.load(get_asset_path('sprites/player_missile_bullet.png')))
         builder.set_init_pos()
         builder.set_init_mov_accel((1, 0))
         builder.set_mov_spd(5.0)
         builder.set_init_state()
+        builder.set_dmg(20)
         builder.set_atk_spd(0.6)
-        builder.set_sound(pygame.mixer.Sound('missile6.wav'))
+        builder.set_hit_box()
+        builder.set_sound(
+            pygame.mixer.Sound(get_asset_path('sounds/missile6.wav')))
         return builder.build()
 
     @staticmethod
@@ -97,13 +132,17 @@ class BulletCreator:
         builder = BulletBuilder()
         builder.set_owner(entity)
         builder.set_weapon_type(WeaponType.LASER)
-        builder.set_pygame_img(pygame.image.load('player_laser_bullet.png'))
+        builder.set_pygame_img(
+            pygame.image.load(get_asset_path('sprites/player_laser_bullet.png')))
         builder.set_init_pos()
         builder.set_init_mov_accel((1, 0))
         builder.set_mov_spd(25.0)
         builder.set_init_state()
+        builder.set_dmg(0.5)
         builder.set_atk_spd(0.015)
-        builder.set_sound(pygame.mixer.Sound('laser4.wav'))
+        builder.set_hit_box()
+        builder.set_sound(
+            pygame.mixer.Sound(get_asset_path('sounds/laser8.wav')))
         return builder.build()
 
     def build_bullet_type(self, bullet_type, entity):
@@ -126,5 +165,5 @@ allied_sprite_group.add(PLAYER)
 enemy_sprite_group = pygame.sprite.Group()
 enemy_sprite_group.add(
     EnemyCreator().build_basic_enemy())
-#
+
 # world_sprite_group = pygame.sprite.Group()

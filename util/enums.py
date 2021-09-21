@@ -7,3 +7,13 @@ class WeaponType(Enum):
     MINI = 2
     MISSILE = 3
     LASER = 4
+
+
+LEFT = 0
+RIGHT = 1
+UP = 2
+DOWN = 3
+
+
+DECREASE = -1
+INCREASE = 1

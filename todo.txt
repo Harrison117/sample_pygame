@@ -21,7 +21,10 @@ h e l l (to be planned...)
 TODO:
     - implement entity collision detection
     - implement Stat Class
-    >HP
-    >DMG
-    >DEF
-    >AGL
+        >HP
+        >DMG
+        >DEF
+        >AGL
+    - implement entity collision calculation
+        > calculate dmg
+        > calculate dmg reduction

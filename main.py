@@ -2,12 +2,15 @@
 Icons made by Good Ware from https://www.flaticon.com/authors/good-ware
 """
 from util.director import *
-from util.pygame_config import SCREEN, CLOCK
+from util.pygame_config import SCREEN, CLOCK, FPS
 from util.enums import *
 
+# from util.entities import StatusBar
+#
+# test_bar = StatusBar(
+#     color=pygame.Color(0, 255, 0),
+#     size=(32, 5))
 
-LEFT=0; RIGHT=1
-UP=2; DOWN=3
 
 # game loop
 # NOTE: every events present while focused on pygame window are recorded
@@ -15,6 +18,12 @@ running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
+
+            if event.key == pygame.K_0:
+                test_bar.update_status_bar(-0.05)
+
+            if event.key == pygame.K_LEFTBRACKET:
+                FPS = 30
 
             if event.key == pygame.K_LEFT:
                 PLAYER.update_x_accel(-1)
@@ -42,6 +51,9 @@ while running:
 
         if event.type == pygame.KEYUP:
             # print(f'Before: {player_mov_dir_state}')
+
+            if event.key == pygame.K_LEFTBRACKET:
+                FPS = 60
 
             if event.key == pygame.K_1:
                 PLAYER.switch_weapon(WeaponType.BASIC)
@@ -91,16 +103,23 @@ while running:
 
     # fill(<RGB color tuple>)
     SCREEN.fill((100, 100, 100))
-
-    allied_sprite_group.update()
-    # NOTE: position of the graphic depends on the rect coordinates
-    allied_sprite_group.draw(SCREEN)
-
+    """
+    NOTE: drawing according to the position of the graphic depends on the 
+    rect coordinates
+    """
     enemy_sprite_group.update()
-    # NOTE: position of the graphic depends on the rect coordinates
     enemy_sprite_group.draw(SCREEN)
+    for enemy in enemy_sprite_group:
+        # enemy.get_hp_bar().update_status_bar()
+        pygame.draw.rect(SCREEN, enemy.get_hp_bar().get_color(), enemy.get_hp_bar())
+
+    allied_sprite_group.update(enemy_sprite_group)
+    allied_sprite_group.draw(SCREEN)
+    for ally in allied_sprite_group:
+        ally.get_weapon().get_bullet_stack().draw(SCREEN)
+
+    # pygame.draw.rect(SCREEN, test_bar.get_color(), test_bar)
 
     # update screen display
-    # pygame.display.update()
     pygame.display.flip()
-    CLOCK.tick(60)
+    CLOCK.tick(FPS)
