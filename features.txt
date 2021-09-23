@@ -1,0 +1,89 @@
+Project starwish features:
+
+shooter
+
+- themed levels
+    > space/sky (basic mech enemy)
+    > enemy base (basic to elite mech enemy)
+    > vegetation/nature (basic unknown/nature enemy)
+    > ruins (basic to elite various enemy)
+    > ocean/gravity well (basic unknown/nature/mech enemy with environment hazard ie. speed)
+    > desert (basic to elite various enemy with environment hazard ie. HP)
+    > sacred ground/stronghold (intermediate to elite enemy with environment hazard ie. HP, shield)
+
+- level type
+    > side-scrolling
+    > open world level
+
+- ship overload!!!
+
+- ship stats
+    > RPG-style player stats, chance-based crit/graze/miss, entity evasion
+    > ATK affects bullet dmg
+    > DEF affects Ship res, and hp/sp strength
+    > AGI affects atk spd and mov spd
+    > LUCK affects crit chance
+
+- maths...
+    > dmg = bullet dmg * base atk multiplier + ((crit?) * bullet_dmg)
+    > dmg reduction = dmg * resistance(bullet.type)
+    > atk spd = base atk spd * base agi multiplier
+    > mov spd = base mov spd * base agi multiplier * acceleration
+
+- multiple health bars
+    > boss phases
+    > elite Ship shield
+
+- shield on enemy Ships
+
+- modern HUD
+    > ship HP/SP bar
+    > boss HP/SP bar
+    > Weapon tab
+    > attack rate bar
+
+- ship types
+    > common
+    > elite
+    > boss
+    > player
+
+- ship/weapon categories
+    > nature
+    > mech
+    > unknown
+
+- bullet hell
+    > bullets can fire bullets
+    > bullet/ship movement patterns
+
+visual novel
+- character interaction
+- friendship points on characters
+
+miscellaneous
+- settings
+    > music and sound settings
+    > key binding
+    > scroll speed
+
+
+Entity is a base class for most objects used in the game. Entities have hitbox features for collision detection. Handles image and rect (hitbox) updates. Entity can either b a  MECH or NATURE entity.
+
+
+Ship is an Entity that moves, and shoots Bullets using its Weapon. Can collide with other Entities. It's properties/strength are dependent on its given Stats.
+    When it is player-controlled:
+        - player can switch bullets, and control movement
+        - Stats determines player's Ship Strength
+    When it is AI-controlled:
+        - AI fires and moves according to BulletPathPattern and MovementPathPattern, respectively
+        - Stats determines AI's Ship Strength
+
+
+Bullet is an Entity that moves, and damages Ships when it collides with them. Bullet lifespan ends if it goes out of bounds, hits a Ship, or when manually specified. In some cases can also fire Bullets
+
+
+Weapon allows ships to fire. Stores a BulletBuilder to build a specified Bullet for firing.
+
+
+Stats dictate the HP, SP, MS of a Ship, the AS of a Ship's Weapon, and dmg of the Bullet the Ship's Weapon fires.

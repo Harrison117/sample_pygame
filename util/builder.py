@@ -8,7 +8,7 @@ class EntityBuilder(ABC):
 
     @abstractmethod
     def set_name(self, name):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def set_pygame_img(self, img):
@@ -61,28 +61,29 @@ class PlayerBuilder(EntityBuilder):
 
     def set_pygame_img(self, img):
         """
-        todo DEPENDENCIES:
-            - requires initialized entity image
+        todo DEPENDENCIES: requires initialized entity image
         :param pygame.Surface img:
         """
         self._entity.image = img
 
         # todo DEPRECATE x_mid/y_mid (due to minimal usage)
-        self._entity.x_mid = self._entity.image.get_width()//2
-        self._entity.y_mid = self._entity.image.get_height()//2
+        # self._entity.x_mid = self._entity.image.get_width()//2
+        # self._entity.y_mid = self._entity.image.get_height()//2
 
     def set_init_pos(self, x_pos=-1, y_pos=-1):
         """
-
+        todo DEPENDENCIES: requires initialized entity x/y position offset
         :param int x_pos:
         :param int y_pos:
         """
-        if x_pos < 0 and y_pos < 0:
-            self._entity.x_pos = (SCREEN_WIDTH // self._entity.x_pos_off) - self._entity.x_mid
-            self._entity.y_pos = (SCREEN_HEIGHT // self._entity.y_pos_off) - self._entity.y_mid
-        else:
-            self._entity.x_pos = x_pos
-            self._entity.y_pos = y_pos
+        # if x_pos < 0 and y_pos < 0:
+        #     self._entity.x_pos = (SCREEN_WIDTH // self._entity.x_pos_off) - self._entity.x_mid
+        #     self._entity.y_pos = (SCREEN_HEIGHT // self._entity.y_pos_off) - self._entity.y_mid
+        # else:
+        #     self._entity.x_pos = x_pos
+        #     self._entity.y_pos = y_pos
+        self._entity.x_pos = x_pos
+        self._entity.y_pos = y_pos
 
     def set_init_state(self, is_alive=True):
         """
@@ -123,8 +124,7 @@ class PlayerBuilder(EntityBuilder):
 
     def set_hit_box(self):
         """
-        todo DEPENDENCIES:
-            - requires an initialized entity image
+        todo DEPENDENCIES: requires an initialized entity image
         """
         self._entity.rect = self._entity.image.get_rect()
         self._entity.rect.center = [
@@ -148,7 +148,7 @@ class EnemyBuilder(PlayerBuilder):
     def setup_hp_bar(self, status_bar_creator):
         """
 
-        :param StatusBarCreator status_bar_creator:
+        :param StatusBarDirector status_bar_creator:
         """
         self._entity.set_hp_bar(
             status_bar_creator.build_hp_bar(self._entity))
@@ -168,7 +168,7 @@ class BulletBuilder(PlayerBuilder):
 
     def set_init_pos(self, x_pos=-1, y_pos=-1):
         """
-
+        todo DEPENDENCIES: requires initialized entity owner and image, entity owner's  x_pos, x_mid
         :param int x_pos:
         :param int y_pos:
         """

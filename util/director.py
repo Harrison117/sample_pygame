@@ -7,7 +7,7 @@ from util.builder import *
 from util.enums import WeaponType
 
 
-class StatusBarCreator:
+class StatusBarDirector:
     SMALL_TYPE_HEIGHT = 3
 
     @staticmethod
@@ -17,13 +17,23 @@ class StatusBarCreator:
         builder.set_color(pygame.Color(0, 255, 0))
         builder.set_pos(
             (entity.get_x_pos(), entity.get_y_pos()),
-            y_off=-StatusBarCreator.SMALL_TYPE_HEIGHT)
+            y_off=-StatusBarDirector.SMALL_TYPE_HEIGHT)
         builder.set_size(
-            (entity.get_width(), StatusBarCreator.SMALL_TYPE_HEIGHT))
+            (entity.get_width(), StatusBarDirector.SMALL_TYPE_HEIGHT))
         return builder.build()
 
 
-class PlayerCreator:
+class EntityDirector(object):
+    @abstractmethod
+    def build_entity_asset(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    def build_entity_properties(self, *args, **kwargs):
+        pass
+
+
+class PlayerDirector:
     @staticmethod
     def build_player():
         builder = PlayerBuilder()
@@ -57,7 +67,7 @@ class EnemyCreator:
              random.choice([-1, 1])))
         builder.set_mov_spd(2)
         builder.set_hit_box()
-        builder.setup_hp_bar(StatusBarCreator())
+        builder.setup_hp_bar(StatusBarDirector())
         return builder.build()
 
 
@@ -81,13 +91,13 @@ class BulletCreator:
         builder.set_owner(entity)
         builder.set_weapon_type(def_weapon_type)
         builder.set_pygame_img(def_image)
+        builder.set_hit_box()
         builder.set_init_pos()
         builder.set_init_mov_accel(def_accel)
         builder.set_mov_spd(def_mov_spd)
         builder.set_init_state()
         builder.set_dmg(def_dmg)
         builder.set_atk_spd(def_atk_spd)
-        builder.set_hit_box()
         builder.set_sound(def_sound)
         return builder.build()
 
@@ -156,7 +166,7 @@ class BulletCreator:
             return self.build_player_laser_bullet(entity)
 
 
-PLAYER = PlayerCreator().build_player()
+PLAYER = PlayerDirector().build_player()
 ENEMY = EnemyCreator().build_basic_enemy()
 
 allied_sprite_group = pygame.sprite.Group()

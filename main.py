@@ -5,12 +5,6 @@ from util.director import *
 from util.pygame_config import SCREEN, CLOCK, FPS
 from util.enums import *
 
-# from util.entities import StatusBar
-#
-# test_bar = StatusBar(
-#     color=pygame.Color(0, 255, 0),
-#     size=(32, 5))
-
 
 # game loop
 # NOTE: every events present while focused on pygame window are recorded
@@ -20,7 +14,7 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_0:
-                test_bar.update_status_bar(-0.05)
+                pass
 
             if event.key == pygame.K_LEFTBRACKET:
                 FPS = 30
@@ -110,7 +104,6 @@ while running:
     enemy_sprite_group.update()
     enemy_sprite_group.draw(SCREEN)
     for enemy in enemy_sprite_group:
-        # enemy.get_hp_bar().update_status_bar()
         pygame.draw.rect(SCREEN, enemy.get_hp_bar().get_color(), enemy.get_hp_bar())
 
     allied_sprite_group.update(enemy_sprite_group)
@@ -118,7 +111,6 @@ while running:
     for ally in allied_sprite_group:
         ally.get_weapon().get_bullet_stack().draw(SCREEN)
 
-    # pygame.draw.rect(SCREEN, test_bar.get_color(), test_bar)
 
     # update screen display
     pygame.display.flip()
