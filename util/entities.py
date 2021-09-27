@@ -379,7 +379,8 @@ class Weapon(object):
                     # print(enemy.get_hp())
                 bullet.kill()
 
-    def calculate_and_return_dmg(self, bullet_dmg):
+    @staticmethod
+    def calculate_and_return_dmg(bullet_dmg):
         return bullet_dmg
 
     def update_bullet_atk_spd(self, base_atk_spd, bullet_atk_spd):
@@ -426,10 +427,28 @@ class StatusBar(pygame.rect.Rect):
             (self._owner.get_x_pos(), self._owner.get_y_pos() - self.height),
             (max(
                 min(
-                    status_value/self._owner.get_max_hp() * self._owner.get_width(),
+                    self.get_health_ratio(status_value) * self._owner.get_width(),
                     self._owner.get_width()),
                 0),
              self.height))
+
+        if self._color.r != 255:
+            self.set_color(
+                pygame.Color(
+                    255 - int(max(self.get_health_ratio(status_value)-0.5, 0) * 255),
+                    self._color.g,
+                    0)
+            )
+        else:
+            self.set_color(
+                pygame.Color(
+                    self._color.r,
+                    int(max(self.get_health_ratio(status_value)+0.5, 0) * 255),
+                    0)
+            )
+
+    def get_health_ratio(self, value):
+        return value/self._owner.get_max_hp()
 
     def get_color(self):
         return self._color

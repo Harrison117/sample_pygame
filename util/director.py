@@ -88,6 +88,7 @@ class BulletCreator:
                                   def_sound=pygame.mixer.Sound(get_asset_path('sounds/fire1.wav')),
                                   def_weapon_type=WeaponType.BASIC, def_accel=(1, 0), def_mov_spd=10.0,
                                   def_dmg=5.0, def_atk_spd=0.2):
+        builder = BulletBuilder()
         builder.set_owner(entity)
         builder.set_weapon_type(def_weapon_type)
         builder.set_pygame_img(def_image)

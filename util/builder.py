@@ -67,8 +67,8 @@ class PlayerBuilder(EntityBuilder):
         self._entity.image = img
 
         # todo DEPRECATE x_mid/y_mid (due to minimal usage)
-        # self._entity.x_mid = self._entity.image.get_width()//2
-        # self._entity.y_mid = self._entity.image.get_height()//2
+        self._entity.x_mid = self._entity.image.get_width()//2
+        self._entity.y_mid = self._entity.image.get_height()//2
 
     def set_init_pos(self, x_pos=-1, y_pos=-1):
         """
@@ -76,14 +76,14 @@ class PlayerBuilder(EntityBuilder):
         :param int x_pos:
         :param int y_pos:
         """
-        # if x_pos < 0 and y_pos < 0:
-        #     self._entity.x_pos = (SCREEN_WIDTH // self._entity.x_pos_off) - self._entity.x_mid
-        #     self._entity.y_pos = (SCREEN_HEIGHT // self._entity.y_pos_off) - self._entity.y_mid
-        # else:
-        #     self._entity.x_pos = x_pos
-        #     self._entity.y_pos = y_pos
-        self._entity.x_pos = x_pos
-        self._entity.y_pos = y_pos
+        if x_pos < 0 and y_pos < 0:
+            self._entity.x_pos = (SCREEN_WIDTH // self._entity.x_pos_off) - self._entity.x_mid
+            self._entity.y_pos = (SCREEN_HEIGHT // self._entity.y_pos_off) - self._entity.y_mid
+        else:
+            self._entity.x_pos = x_pos
+            self._entity.y_pos = y_pos
+        # self._entity.x_pos = x_pos
+        # self._entity.y_pos = y_pos
 
     def set_init_state(self, is_alive=True):
         """
