@@ -20,7 +20,8 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_0:
-                test_bar.update_status_bar(-0.05)
+                pass
+                # test_bar.update_status_bar(-0.05)
 
             if event.key == pygame.K_LEFTBRACKET:
                 FPS = 30
