@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 import os
 
 SCREEN_WIDTH = 600
