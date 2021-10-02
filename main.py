@@ -102,24 +102,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # fill(<RGB color tuple>)
     SCREEN.fill((100, 100, 100))
-    """
-    NOTE: drawing according to the position of the graphic depends on the 
-    rect coordinates
-    """
-    enemy_sprite_group.update()
-    enemy_sprite_group.draw(SCREEN)
-    for enemy in enemy_sprite_group:
-        # enemy.get_hp_bar().update_status_bar()
-        pygame.draw.rect(SCREEN, enemy.get_hp_bar().get_color(), enemy.get_hp_bar())
-
-    allied_sprite_group.update(enemy_sprite_group)
-    allied_sprite_group.draw(SCREEN)
-    for ally in allied_sprite_group:
-        ally.get_weapon().get_bullet_stack().draw(SCREEN)
-
-    # pygame.draw.rect(SCREEN, test_bar.get_color(), test_bar)
 
     # update screen display
     pygame.display.flip()
