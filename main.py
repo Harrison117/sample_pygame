@@ -31,14 +31,13 @@ def main():
         for ally in allied_sprite_group:
             ally.get_weapon().get_bullet_stack().draw(SCREEN)
 
-
         # update screen display
         pygame.display.flip()
         CLOCK.tick(FPS)
 
 
 def observer_test():
-
+    pass
 
 
 if __name__ == '__main__':

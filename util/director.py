@@ -82,24 +82,21 @@ class WeaponCreator:
 
 class BulletCreator:
     @staticmethod
-    def build_player_basic_bullet(entity,
-                                  builder=BulletBuilder(),
-                                  def_image=pygame.image.load(get_asset_path('sprites/player_basic_bullet.png')),
-                                  def_sound=pygame.mixer.Sound(get_asset_path('sounds/fire1.wav')),
-                                  def_weapon_type=WeaponType.BASIC, def_accel=(1, 0), def_mov_spd=10.0,
-                                  def_dmg=5.0, def_atk_spd=0.2):
+    def build_player_basic_bullet(entity):
         builder = BulletBuilder()
         builder.set_owner(entity)
-        builder.set_weapon_type(def_weapon_type)
-        builder.set_pygame_img(def_image)
+        builder.set_weapon_type(WeaponType.BASIC)
+        builder.set_pygame_img(pygame.image.load(
+            get_asset_path('sprites/player_basic_bullet.png')))
         builder.set_hit_box()
         builder.set_init_pos()
-        builder.set_init_mov_accel(def_accel)
-        builder.set_mov_spd(def_mov_spd)
+        builder.set_init_mov_accel((1, 0))
+        builder.set_mov_spd(10.0)
         builder.set_init_state()
-        builder.set_dmg(def_dmg)
-        builder.set_atk_spd(def_atk_spd)
-        builder.set_sound(def_sound)
+        builder.set_dmg(5.0)
+        builder.set_atk_spd(0.2)
+        builder.set_sound(pygame.mixer.Sound(
+            get_asset_path('sounds/fire1.wav')))
         return builder.build()
 
     @staticmethod
