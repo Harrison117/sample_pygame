@@ -51,14 +51,18 @@ class LevelScene(Listener):
         pass
 
     def update_view(self, e):
-        try:
-            e.get_data()['window'].blit(self.background, (0, 0))
+        data = e.get_data()
 
-        except TypeError:
+        if data:
+            window = data['window']
+
+            if window:
+                window.blit(self.background, (0, 0))
+            else:
+                print('Error: window not found...')
+
+        else:
             print('Error: data not found...')
-
-        except KeyError:
-            print('Error: window not found...')
 
 
 class EntitySprite(Listener, pygame.sprite.Sprite):
@@ -66,9 +70,21 @@ class EntitySprite(Listener, pygame.sprite.Sprite):
         Listener.__init__(self, event_mgr=event_mgr)
         pygame.sprite.Sprite.__init__(self)
 
+        # self._event_mgr.add(UpdateSpriteEvent, WeakBoundMethod(self.update_sprite))
+
         self.image = image
         self.rect = self.image.get_rect()
 
-    def update_view(self, e):
-        try:
-            e.get_data()['window']
+    def update_sprite(self, e):
+        data = e.get_data()
+
+        if data:
+            pos = data['pos']
+
+            if pos:
+                self.rect.center = pos
+            else:
+                print('Error: pos not found')
+
+        else:
+            print('Error: data not found...')

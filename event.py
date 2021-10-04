@@ -18,12 +18,14 @@ class Event(object):
 
 
 class UpdateViewEvent(Event):
-    def __init__(self, window):
+    def __init__(self, window=None, screen=None):
         self._window = window
+        self._screen = screen
 
     def get_data(self):
         return {
-            'window': self._window
+            'window': self._window,
+            'screen': self._screen
         }
 
 
@@ -34,6 +36,16 @@ class TransformViewEvent(Event):
     def get_data(self):
         return {
             'color': self._color
+        }
+
+
+class UpdateSpriteEvent(Event):
+    def __init__(self, pos=None):
+        self._pos = pos
+
+    def get_data(self):
+        return {
+            'pos': self._pos
         }
 
 
