@@ -1,12 +1,40 @@
 from collections import defaultdict
 
 
+class Listener(object):
+    def __init__(self, event_mgr=None):
+        if event_mgr:
+            self._event_mgr = event_mgr
+        else:
+            raise AttributeError
+
+
 class Event(object):
+    def __call__(self, *args, **kwargs):
+        pass
+
     def get_data(self):
         pass
 
-    def __call__(self, *args, **kwargs):
-        pass
+
+class UpdateViewEvent(Event):
+    def __init__(self, window):
+        self._window = window
+
+    def get_data(self):
+        return {
+            'window': self._window
+        }
+
+
+class TransformViewEvent(Event):
+    def __init__(self, color=None):
+        self._color = color
+
+    def get_data(self):
+        return {
+            'color': self._color
+        }
 
 
 class MoveEvent(Event):
@@ -14,7 +42,9 @@ class MoveEvent(Event):
         self._key = key
 
     def get_data(self):
-        return {'key': self._key}
+        return {
+            'key': self._key
+        }
 
 
 class TickEvent(Event):
@@ -25,14 +55,6 @@ class TickEvent(Event):
 class QuitEvent(Event):
     def __init__(self):
         super(QuitEvent, self).__init__()
-
-
-class Listener(object):
-    def __init__(self, event_mgr=None):
-        if event_mgr:
-            self._event_mgr = event_mgr
-        else:
-            raise AttributeError
 
 
 class EventManager:
