@@ -1,6 +1,5 @@
 import random
 
-import pygame
 
 from util.pygame_config import *
 from util.builder import *
