@@ -59,7 +59,7 @@ class LevelScene(Listener):
             if window:
                 window.blit(self.background, (0, 0))
             else:
-                print('Error: window not found...')
+                print('Warning: window not found...')
 
         else:
             print('Error: data not found...')
@@ -69,14 +69,14 @@ class EntitySprite(Listener, pygame.sprite.Sprite):
     def __init__(self, event_mgr, image=pygame.Surface((0, 0))):
         Listener.__init__(self, event_mgr=event_mgr)
         pygame.sprite.Sprite.__init__(self)
-
-        # self._event_mgr.add(UpdateSpriteEvent, WeakBoundMethod(self.update_sprite))
+        self._event_mgr.add(UpdateSpritePosEvent, WeakBoundMethod(self.update_sprite_pos))
 
         self.image = image
         self.rect = self.image.get_rect()
 
-    def update_sprite(self, e):
+    def update_sprite_pos(self, e):
         data = e.get_data()
+        event = None
 
         if data:
             pos = data['pos']
@@ -88,3 +88,26 @@ class EntitySprite(Listener, pygame.sprite.Sprite):
 
         else:
             print('Error: data not found...')
+
+
+class EntityGroup(Listener, pygame.sprite.Group):
+    def __init__(self, event_mgr, *sprites):
+        Listener.__init__(self, event_mgr)
+        pygame.sprite.Group.__init__(self, *sprites)
+
+        # self._event_mgr.add(DrawSpriteEvent, WeakBoundMethod(self.draw_sprites))
+        self._event_mgr.add(UpdateViewEvent, WeakBoundMethod(self.update_view))
+
+    def update_view(self, e):
+        data = e.get_data()
+
+        if data:
+            window = data['window']
+
+            if window:
+                self.draw(window)
+            else:
+                print('window not found...')
+
+        else:
+            print('data not found...')

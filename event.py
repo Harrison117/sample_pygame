@@ -18,14 +18,12 @@ class Event(object):
 
 
 class UpdateViewEvent(Event):
-    def __init__(self, window=None, screen=None):
+    def __init__(self, window=None):
         self._window = window
-        self._screen = screen
 
     def get_data(self):
         return {
             'window': self._window,
-            'screen': self._screen
         }
 
 
@@ -35,27 +33,41 @@ class TransformViewEvent(Event):
 
     def get_data(self):
         return {
-            'color': self._color
+            'color': self._color,
         }
 
 
-class UpdateSpriteEvent(Event):
+class DrawSpriteEvent(Event):
+    def __init__(self, window=None):
+        self._window = window
+
+    def get_data(self):
+        return {
+            'window': self._window,
+        }
+
+
+class UpdateSpritePosEvent(Event):
     def __init__(self, pos=None):
         self._pos = pos
 
     def get_data(self):
         return {
-            'pos': self._pos
+            'pos': self._pos,
         }
 
 
-class MoveEvent(Event):
-    def __init__(self, key):
-        self._key = key
+class InputMoveEvent(Event):
+    def __init__(self, direction=None, magnitude=None, is_player=False):
+        self._is_player = is_player
+        self._direction = direction
+        self._magnitude = magnitude
 
     def get_data(self):
         return {
-            'key': self._key
+            'is_player': self._is_player,
+            'direction': self._direction,
+            'magnitude': self._magnitude,
         }
 
 

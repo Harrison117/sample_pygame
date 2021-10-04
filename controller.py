@@ -22,19 +22,32 @@ class KeyboardController(Listener):
             if pygame_event.type == QUIT or (pygame_event.type == KEYDOWN and pygame_event.key == K_ESCAPE):
                 event = QuitEvent()
             elif pygame_event.type == KEYDOWN:
-                if pygame_event.key == K_UP:
-                    # event = MoveEvent(UP)
-                    event = TransformViewEvent(color=(255,255,255))
-                elif pygame_event.key == K_DOWN:
-                    event = MoveEvent(DOWN)
-                elif pygame_event.key == K_LEFT:
-                    event = MoveEvent(LEFT)
+                if pygame_event.key == K_LEFT:
+                    event = InputMoveEvent(
+                        direction=LEFT, magnitude=LEFT_MAGNITUDE, is_player=True)
                 elif pygame_event.key == K_RIGHT:
-                    event = MoveEvent(RIGHT)
+                    event = InputMoveEvent(
+                        direction=RIGHT, magnitude=RIGHT_MAGNITUDE, is_player=True)
+                elif pygame_event.key == K_UP:
+                    event = InputMoveEvent(
+                        direction=UP, magnitude=UP_MAGNITUDE, is_player=True)
+                elif pygame_event.key == K_DOWN:
+                    event = InputMoveEvent(
+                        direction=DOWN, magnitude=DOWN_MAGNITUDE, is_player=True)
 
             elif pygame_event.type == KEYUP:
-                if pygame_event.key == K_UP:
-                    event = TransformViewEvent(color=(100, 100, 100))
+                if pygame_event.key == K_LEFT:
+                    event = InputMoveEvent(
+                        direction=LEFT, magnitude=STOP, is_player=True)
+                elif pygame_event.key == K_RIGHT:
+                    event = InputMoveEvent(
+                        direction=RIGHT, magnitude=STOP, is_player=True)
+                elif pygame_event.key == K_UP:
+                    event = InputMoveEvent(
+                        direction=UP, magnitude=STOP, is_player=True)
+                elif pygame_event.key == K_DOWN:
+                    event = InputMoveEvent(
+                        direction=DOWN, magnitude=STOP, is_player=True)
 
             if event:
                 print(f'Event {event.__class__.__name__} sent! Data: {event.get_data()}')
