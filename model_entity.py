@@ -5,7 +5,7 @@ from helper.helper import WeakBoundMethod
 
 class Entity(Listener):
     def __init__(self, event_mgr,
-                 pos=(0, 0), pos_off=(0, 0), accel=(0, 0), mov_spd=0.05):
+                 pos=(0, 0), pos_off=(0, 0), accel=(0, 0), mov_spd=3.0):
         super(Entity, self).__init__(
             event_mgr=event_mgr)
 
@@ -22,16 +22,21 @@ class Entity(Listener):
 
 
 class Ship(Entity):
-    def __init__(self, event_mgr, is_player=False, **kwargs):
+    def __init__(self, event_mgr,
+                 ship_weapon=None, ship_stats=None, ship_type=None,
+                 ship_category=None, ship_status=None,
+                 is_player=False,
+                 **kwargs):
         super(Ship, self).__init__(event_mgr, **kwargs)
 
         self._event_mgr.add(TickEvent, WeakBoundMethod(self.on_tick_event))
         self._event_mgr.add(InputMoveEvent, WeakBoundMethod(self.on_entity_move))
 
-        self._ship_weapon = None
-        self._ship_stats = None
-        self._ship_type = None
-        self._ship_status = None
+        self._ship_weapon = ship_weapon
+        self._ship_stats = ship_stats
+        self._ship_type = ship_type
+        self._ship_category = ship_category
+        self._ship_status = ship_status
 
         self._is_player = is_player
         self._move_state = {
@@ -72,10 +77,12 @@ class Ship(Entity):
         else:
             print("data not found...")
 
-        print(self._move_state)
-
         if event:
             self._event_mgr.post(event)
+
+    def update_pos(self):
+        self._pos[X_AXIS] = self._pos[X_AXIS] + (self._accel_vector[X_AXIS] * self._mov_spd)
+        self._pos[Y_AXIS] = self._pos[Y_AXIS] + (self._accel_vector[Y_AXIS] * self._mov_spd)
 
     def update_accel(self, direction, magnitude):
         if magnitude == STOP:
@@ -93,10 +100,6 @@ class Ship(Entity):
 
             elif direction == UP or direction == DOWN:
                 self._accel_vector[Y_AXIS] = magnitude
-
-    def update_pos(self):
-        self._pos[X_AXIS] = self._pos[X_AXIS] + (self._accel_vector[X_AXIS] * self._mov_spd)
-        self._pos[Y_AXIS] = self._pos[Y_AXIS] + (self._accel_vector[Y_AXIS] * self._mov_spd)
 
     def set_move_state(self, direction):
         self._move_state[direction] = not self._move_state[direction]

@@ -34,6 +34,8 @@ class KeyboardController(Listener):
                 elif pygame_event.key == K_DOWN:
                     event = InputMoveEvent(
                         direction=DOWN, magnitude=DOWN_MAGNITUDE, is_player=True)
+                elif pygame_event.key == K_SPACE:
+                    pass
 
             elif pygame_event.type == KEYUP:
                 if pygame_event.key == K_LEFT:
@@ -48,9 +50,11 @@ class KeyboardController(Listener):
                 elif pygame_event.key == K_DOWN:
                     event = InputMoveEvent(
                         direction=DOWN, magnitude=STOP, is_player=True)
+                elif pygame_event.key == K_SPACE:
+                    pass
 
             if event:
-                print(f'Event {event.__class__.__name__} sent! Data: {event.get_data()}')
+                # print(f'Event {event.__class__.__name__} sent! Data: {event.get_data()}')
                 self._event_mgr.post(event)
 
 
@@ -59,13 +63,15 @@ class CPUSpinnerController(Listener):
         super(CPUSpinnerController, self).__init__(
             event_mgr=event_mgr)
         self.running = True
+        self._clock = pygame.time.Clock()
+        self._milliseconds = 0
 
         self._event_mgr.add(QuitEvent, WeakBoundMethod(self.on_quit_event))
 
     def run(self):
         while self.running:
-            event = TickEvent()
-            self._event_mgr.post(event)
+            self._event_mgr.post(TickEvent())
+            self._milliseconds = self._clock.tick(60)
 
     def on_quit_event(self, event):
         self.running = False

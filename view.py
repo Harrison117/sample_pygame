@@ -95,7 +95,6 @@ class EntityGroup(Listener, pygame.sprite.Group):
         Listener.__init__(self, event_mgr)
         pygame.sprite.Group.__init__(self, *sprites)
 
-        # self._event_mgr.add(DrawSpriteEvent, WeakBoundMethod(self.draw_sprites))
         self._event_mgr.add(UpdateViewEvent, WeakBoundMethod(self.update_view))
 
     def update_view(self, e):
