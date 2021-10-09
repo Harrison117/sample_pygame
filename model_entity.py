@@ -3,6 +3,42 @@ from util.enums import *
 from helper.helper import WeakBoundMethod
 
 
+class StaticClass(object):
+    def __init__(self, pos=(0, 0), off=(0, 0)):
+        self._position = pos
+        self._offset = off
+
+    def init_position(self):
+        pass
+
+
+class MovableClass(StaticClass):
+    def __init__(self, pos=(0, 0), off=(0, 0), angle=(0, 0), mov_spd=(0, 0)):
+        super(MovableClass, self).__init__(pos=pos, off=off)
+        self._angle_vector = angle
+        self._move_speed = mov_spd
+
+    def update_pos(self):
+        pass
+
+    def update_angle(self, direction, magnitude):
+        pass
+
+
+class ProjectileClass(object):
+    def __init__(self, dmg=0.0):
+        self._damage = dmg
+
+    def calculate_dmg(self):
+        pass
+
+
+class DestructibleClass(object):
+    def __init__(self, hp=100.0, sp=0.0):
+        self._health_points = hp
+        self._shield_points = sp
+
+
 class Entity(Listener):
     def __init__(self, event_mgr,
                  pos=(0, 0), pos_off=(0, 0), accel=(0, 0), mov_spd=3.0):
