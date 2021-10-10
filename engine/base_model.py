@@ -1,4 +1,3 @@
-
 from util.enums import *
 from helper.helper import *
 
@@ -19,10 +18,6 @@ class Movable(Static):
         raise NotImplementedError
 
     def update_angle(self, *args, **kwargs):
-        raise NotImplementedError
-
-    # event listener
-    def on_move(self, e):
         raise NotImplementedError
 
 
@@ -59,10 +54,6 @@ class Controllable(Movable):
 
     def set_move_state(self, direction):
         self._move_state[direction] = not self._move_state[direction]
-
-    # event listener
-    def on_move(self, e):
-        raise NotImplementedError
 
 
 class Projectile(object):

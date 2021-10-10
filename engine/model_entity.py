@@ -1,5 +1,5 @@
-from event import *
-from base_model import *
+from engine.event import *
+from engine.base_model import *
 
 
 class GameEntity(Listener):
@@ -11,6 +11,9 @@ class GameEntity(Listener):
 
     # event listener
     def on_tick(self, e):
+        raise NotImplementedError
+
+    def on_move(self, e):
         raise NotImplementedError
 
 
@@ -26,6 +29,9 @@ class ShipEntity(GameEntity, Destructible, Projectile, Shooter):
 
     # event listener
     def on_tick(self, e):
+        raise NotImplementedError
+
+    def on_move(self, e):
         raise NotImplementedError
 
 

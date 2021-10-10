@@ -1,5 +1,5 @@
 import pygame
-from event import *
+from engine.event import *
 from helper.helper import WeakBoundMethod
 
 

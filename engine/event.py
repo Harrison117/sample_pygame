@@ -6,7 +6,7 @@ class Listener(object):
         if event_mgr:
             self._event_mgr = event_mgr
         else:
-            raise AttributeError
+            raise AttributeError(f'EventManager expected; got {event_mgr.__class__.__name__} instead')
 
 
 class Event(object):
@@ -14,7 +14,7 @@ class Event(object):
         pass
 
     def get_data(self):
-        pass
+        raise NotImplementedError
 
 
 class UpdateViewEvent(Event):
@@ -75,13 +75,19 @@ class TickEvent(Event):
     def __init__(self):
         super(TickEvent, self).__init__()
 
+    def get_data(self):
+        pass
+
 
 class QuitEvent(Event):
     def __init__(self):
         super(QuitEvent, self).__init__()
 
+    def get_data(self):
+        pass
 
-class EventManager:
+
+class EventManager(object):
     """this object is responsible for coordinating most communication
     between the Model, View, and Controller."""
 
