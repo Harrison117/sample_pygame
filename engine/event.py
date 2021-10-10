@@ -10,9 +10,6 @@ class Listener(object):
 
 
 class Event(object):
-    def __call__(self, *args, **kwargs):
-        pass
-
     def get_data(self):
         raise NotImplementedError
 
@@ -72,17 +69,11 @@ class InputMoveEvent(Event):
 
 
 class TickEvent(Event):
-    def __init__(self):
-        super(TickEvent, self).__init__()
-
     def get_data(self):
         pass
 
 
 class QuitEvent(Event):
-    def __init__(self):
-        super(QuitEvent, self).__init__()
-
     def get_data(self):
         pass
 
@@ -96,7 +87,6 @@ class EventManager(object):
 
     def add(self, event_class, listener_object):
         self._listeners.setdefault(event_class, list()).append(listener_object)
-        print(self._listeners)
 
     def post(self, event):
         try:
