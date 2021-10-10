@@ -1,125 +1,39 @@
-"""
-Icons made by Good Ware from https://www.flaticon.com/authors/good-ware
-"""
-from util.director import *
-from util.pygame_config import SCREEN, CLOCK, FPS
-from util.enums import *
-
-# from util.entities import StatusBar
-#
-# test_bar = StatusBar(
-#     color=pygame.Color(0, 255, 0),
-#     size=(32, 5))
+from engine.model_entity import *
+from engine.view import *
+from engine.controller import *
 
 
-# game loop
-# NOTE: every events present while focused on pygame window are recorded
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
+def main():
+    """..."""
+    event_mgr = EventManager()
 
-            if event.key == pygame.K_0:
-                test_bar.update_status_bar(-0.05)
+    keyboard = KeyboardController(event_mgr)
+    spinner = CPUSpinnerController(event_mgr)
+    pygame_view = PygameWindow(event_mgr)
+    bg = pygame.Surface(pygame_view.get_window_size())
+    bg.fill((100, 100, 100))
+    pygame_level_view = LevelScene(
+        event_mgr,
+        background=bg)
+    hp = 100
+    sp = 0
+    dmg = hp
+    weapon = None
+    player = Player(
+        event_mgr, hp, sp, dmg, weapon,
+        pos=OrderedPair(0, 0), off=OrderedPair(0, 0), angle=OrderedPair(0, 0), mov_spd=3
+    )
 
-            if event.key == pygame.K_LEFTBRACKET:
-                FPS = 30
+    player_view = EntitySprite(
+        event_mgr,
+        image=pygame.image.load('./assets/sprites/player.png'))
 
-            if event.key == pygame.K_LEFT:
-                PLAYER.update_x_accel(-1)
-                PLAYER.set_movement_state(LEFT)
-                # print("left pressed!")
+    sprite_group = EntityGroup(event_mgr, player_view)
 
-            if event.key == pygame.K_RIGHT:
-                PLAYER.update_x_accel(1)
-                PLAYER.set_movement_state(RIGHT)
-                # print("right pressed!")
+    # game = Game(event_mgr)
 
-            if event.key == pygame.K_UP:
-                PLAYER.update_y_accel(-1)
-                PLAYER.set_movement_state(UP)
-                # print("up pressed!")
+    spinner.run()
 
-            if event.key == pygame.K_DOWN:
-                PLAYER.update_y_accel(1)
-                PLAYER.set_movement_state(DOWN)
-                # print("down pressed!")
 
-            if event.key == pygame.K_SPACE:
-                PLAYER.set_weapon_firing_state()
-                # PLAYER.print_bullet_stack()
-
-        if event.type == pygame.KEYUP:
-            # print(f'Before: {player_mov_dir_state}')
-
-            if event.key == pygame.K_LEFTBRACKET:
-                FPS = 60
-
-            if event.key == pygame.K_1:
-                PLAYER.switch_weapon(WeaponType.BASIC)
-
-            if event.key == pygame.K_2:
-                PLAYER.switch_weapon(WeaponType.MINI)
-
-            if event.key == pygame.K_3:
-                PLAYER.switch_weapon(WeaponType.MISSILE)
-
-            if event.key == pygame.K_4:
-                PLAYER.switch_weapon(WeaponType.LASER)
-
-            if (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT) and \
-                    not (PLAYER.is_moving(LEFT) and PLAYER.is_moving(RIGHT)):
-                PLAYER.update_x_accel(0)
-                # print("left/right released!")
-
-            if event.key == pygame.K_LEFT:
-                PLAYER.set_movement_state(LEFT)
-                # print("left released!")
-
-            if event.key == pygame.K_RIGHT:
-                PLAYER.set_movement_state(RIGHT)
-                # print("right released!")
-
-            if (event.key == pygame.K_UP or event.key == pygame.K_DOWN) and \
-                    not (PLAYER.is_moving(UP) and PLAYER.is_moving(DOWN)):
-                PLAYER.update_y_accel(0)
-                # print("up/down released!")
-
-            if event.key == pygame.K_UP:
-                PLAYER.set_movement_state(UP)
-                # print("up released!")
-
-            if event.key == pygame.K_DOWN:
-                PLAYER.set_movement_state(DOWN)
-                # print("down released!")
-
-            if event.key == pygame.K_SPACE:
-                # PLAYER.set_weapon_firing_state()
-                pass
-            # print(f'After: {player_mov_dir_state}\n')
-
-        if event.type == pygame.QUIT:
-            running = False
-
-    # fill(<RGB color tuple>)
-    SCREEN.fill((100, 100, 100))
-    """
-    NOTE: drawing according to the position of the graphic depends on the 
-    rect coordinates
-    """
-    enemy_sprite_group.update()
-    enemy_sprite_group.draw(SCREEN)
-    for enemy in enemy_sprite_group:
-        # enemy.get_hp_bar().update_status_bar()
-        pygame.draw.rect(SCREEN, enemy.get_hp_bar().get_color(), enemy.get_hp_bar())
-
-    allied_sprite_group.update(enemy_sprite_group)
-    allied_sprite_group.draw(SCREEN)
-    for ally in allied_sprite_group:
-        ally.get_weapon().get_bullet_stack().draw(SCREEN)
-
-    # pygame.draw.rect(SCREEN, test_bar.get_color(), test_bar)
-
-    # update screen display
-    pygame.display.flip()
-    CLOCK.tick(FPS)
+if __name__ == "__main__":
+    main()
