@@ -36,9 +36,5 @@ def main():
         CLOCK.tick(FPS)
 
 
-def observer_test():
-    pass
-
-
 if __name__ == '__main__':
     main()
