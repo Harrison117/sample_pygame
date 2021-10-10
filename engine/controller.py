@@ -3,7 +3,7 @@ from pygame.locals import *
 
 from helper.helper import WeakBoundMethod
 from util.enums import *
-from event import *
+from engine.event import *
 
 
 class KeyboardController(Listener):
@@ -54,7 +54,6 @@ class KeyboardController(Listener):
                     pass
 
             if event:
-                # print(f'Event {event.__class__.__name__} sent! Data: {event.get_data()}')
                 self._event_mgr.post(event)
 
 
@@ -73,5 +72,5 @@ class CPUSpinnerController(Listener):
             self._event_mgr.post(TickEvent())
             self._milliseconds = self._clock.tick(60)
 
-    def on_quit_event(self, event):
+    def on_quit_event(self, e):
         self.running = False

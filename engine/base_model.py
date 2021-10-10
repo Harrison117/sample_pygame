@@ -3,13 +3,18 @@ from helper.helper import *
 
 
 class Static(object):
-    def __init__(self, pos=OrderedPair(0, 0).get_def(), off=OrderedPair(0, 0).get_def()):
+    def __init__(self,
+                 pos=OrderedPair(0, 0).get_tuple(),
+                 off=OrderedPair(0, 0).get_tuple()):
         self._position = pos
         self._offset = off
 
 
 class Movable(Static):
-    def __init__(self, angle=OrderedPair(0, 0).get_def(), mov_spd=0, **static_properties):
+    def __init__(self,
+                 angle=OrderedPair(0, 0).get_tuple(),
+                 mov_spd=0,
+                 **static_properties):
         super(Movable, self).__init__(**static_properties)
         self._angle_vector = angle
         self._move_speed = mov_spd
@@ -65,19 +70,35 @@ class Projectile(object):
 
 
 class Destructible(object):
-    def __init__(self, hp=100, sp=0):
+    def __init__(self, hp=100, sp=0, max_hp=100, max_sp=0):
         self._health_points = hp
         self._shield_points = sp
 
+        self._max_hp = max_hp
+        self._max_sp = max_sp
+
     def update_health_points(self, value, operation=1):
-        self._health_points += value * operation
+        if 0 >= self._health_points + value * operation <= self._max_hp:
+            self._health_points += value * operation
+
+        else:
+            if self._health_points + value * operation < 0:
+                self._health_points = 0
+
+            elif self._health_points + value * operation > self._max_hp:
+                self._health_points = self._max_hp
 
     def update_shield_points(self, value, operation=1):
-        if value < self._shield_points:
-            self._shield_points += value, operation
+        if 0 >= self._shield_points + value * operation <= self._max_sp:
+            self._shield_points += value * operation
+
         else:
-            self.update_health_points(value-self._shield_points, operation=operation)
-            self._shield_points = 0
+            if self._shield_points + value * operation < 0:
+                self.update_health_points(value-self._shield_points, operation=operation)
+                self._shield_points = 0
+
+            elif self._shield_points + value * operation > self._max_sp:
+                self._shield_points = self._max_sp
 
 
 class Shooter(object):
@@ -87,4 +108,4 @@ class Shooter(object):
 
     def fire(self):
         if self._weapon:
-            pass
+            self._weapon.fire()

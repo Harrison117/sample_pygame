@@ -65,6 +65,7 @@ class EntitySprite(Listener, pygame.sprite.Sprite):
     def __init__(self, event_mgr, image=pygame.Surface((0, 0))):
         Listener.__init__(self, event_mgr=event_mgr)
         pygame.sprite.Sprite.__init__(self)
+
         self._event_mgr.add(UpdateSpritePosEvent, WeakBoundMethod(self.update_sprite_pos))
 
         self.image = image

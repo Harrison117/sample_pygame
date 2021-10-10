@@ -2,7 +2,6 @@ import weakref
 
 
 class WeakBoundMethod(object):
-
     def __init__(self, method):
         self._self = weakref.ref(method.__self__)
         self._func = method.__func__
@@ -11,12 +10,16 @@ class WeakBoundMethod(object):
         self._func(self._self(), *args, **kwargs)
 
 
+# todo refactor OrderedPair so that it won't have a list-like behavior OR replace with pygame.vector2
 class OrderedPair(list):
+    """
+    Class that allows vector-like operations like list+list, list-list, list*list,
+    list//list, etc. Implements strict list length as it can only contain 2 values;
+    x and y values.
+    """
     def __init__(self, *sequence):
-        self._tuple_seq = tuple(sequence)
-
         if len(sequence) == 2:
-            super(OrderedPair, self).__init__(self._tuple_seq)
+            super(OrderedPair, self).__init__(tuple(sequence))
 
         else:
             raise ValueError(f'Ordered Pairs only have exactly 2 values; {len(sequence)} were given instead')
@@ -80,13 +83,10 @@ class OrderedPair(list):
     def __truediv__(self, other):
         return self.__floordiv__(other)
 
-    # todo __iadd__, __isub__, __imul__, __ifloordiv__, __itruediv__
-
-    def get_def(self):
-        return self._tuple_seq
+    # todo implement __iadd__, __isub__, __imul__, __ifloordiv__, __itruediv__
 
     def get_list(self):
         return list(self)
 
     def get_tuple(self):
-        return self.get_def()
+        return tuple(self)
