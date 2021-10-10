@@ -4,16 +4,12 @@ from helper.helper import WeakBoundMethod
 
 
 class PygameWindow(Listener):
-    def __init__(self, event_mgr, window=None, win_size=(600, 250)):
+    def __init__(self, event_mgr, win_size=(600, 250)):
         super(PygameWindow, self).__init__(
             event_mgr=event_mgr)
 
         self._event_mgr.add(TickEvent, WeakBoundMethod(self.on_tick_event))
 
-        self._window = window
-        self.init_pygame_window(win_size)
-
-    def init_pygame_window(self, win_size):
         pygame.init()
 
         # create the screen
