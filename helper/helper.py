@@ -84,6 +84,7 @@ class OrderedPair(list):
         return self.__floordiv__(other)
 
     # todo implement __iadd__, __isub__, __imul__, __ifloordiv__, __itruediv__
+    # todo implement __radd__, __rsub__, __rmul__, __rfloordiv__, __rtruediv__
 
     def get_list(self):
         return list(self)

@@ -23,54 +23,57 @@ class KeyboardController(Listener):
                 event = QuitEvent()
             elif pygame_event.type == KEYDOWN:
                 if pygame_event.key == K_LEFT:
-                    event = InputMoveEvent(
-                        direction=LEFT, magnitude=LEFT_MAGNITUDE, is_player=True)
+                    event = InputEvent(
+                        movement_vector={LEFT: LEFT_MAGNITUDE})
                 elif pygame_event.key == K_RIGHT:
-                    event = InputMoveEvent(
-                        direction=RIGHT, magnitude=RIGHT_MAGNITUDE, is_player=True)
+                    event = InputEvent(
+                        movement_vector={RIGHT: RIGHT_MAGNITUDE})
                 elif pygame_event.key == K_UP:
-                    event = InputMoveEvent(
-                        direction=UP, magnitude=UP_MAGNITUDE, is_player=True)
+                    event = InputEvent(
+                        movement_vector={UP: UP_MAGNITUDE})
                 elif pygame_event.key == K_DOWN:
-                    event = InputMoveEvent(
-                        direction=DOWN, magnitude=DOWN_MAGNITUDE, is_player=True)
+                    event = InputEvent(
+                        movement_vector={DOWN: DOWN_MAGNITUDE})
                 elif pygame_event.key == K_SPACE:
-                    pass
+                    event = InputEvent(firing=True)
+                elif pygame_event.key == K_c:
+                    event = InputEvent(auto_firing=True)
 
             elif pygame_event.type == KEYUP:
                 if pygame_event.key == K_LEFT:
-                    event = InputMoveEvent(
-                        direction=LEFT, magnitude=STOP, is_player=True)
+                    event = InputEvent(
+                        movement_vector={LEFT: STOP})
                 elif pygame_event.key == K_RIGHT:
-                    event = InputMoveEvent(
-                        direction=RIGHT, magnitude=STOP, is_player=True)
+                    event = InputEvent(
+                        movement_vector={RIGHT: STOP})
                 elif pygame_event.key == K_UP:
-                    event = InputMoveEvent(
-                        direction=UP, magnitude=STOP, is_player=True)
+                    event = InputEvent(
+                        movement_vector={UP: STOP})
                 elif pygame_event.key == K_DOWN:
-                    event = InputMoveEvent(
-                        direction=DOWN, magnitude=STOP, is_player=True)
+                    event = InputEvent(
+                        movement_vector={DOWN: STOP})
                 elif pygame_event.key == K_SPACE:
-                    pass
+                    event = InputEvent(firing=False)
 
             if event:
                 self._event_mgr.post(event)
 
 
 class CPUSpinnerController(Listener):
-    def __init__(self, event_mgr):
+    def __init__(self, event_mgr, fps=60):
         super(CPUSpinnerController, self).__init__(
             event_mgr=event_mgr)
         self.running = True
         self._clock = pygame.time.Clock()
-        self._milliseconds = 0
+        self._frames_per_second = fps
 
         self._event_mgr.add(QuitEvent, WeakBoundMethod(self.on_quit_event))
 
     def run(self):
         while self.running:
-            self._event_mgr.post(TickEvent())
-            self._milliseconds = self._clock.tick(60)
+            self._event_mgr.post(
+                TickEvent(
+                    ms_per_frame=self._clock.tick(self._frames_per_second)))
 
     def on_quit_event(self, e):
         self.running = False

@@ -54,23 +54,28 @@ class UpdateSpritePosEvent(Event):
         }
 
 
-class InputMoveEvent(Event):
-    def __init__(self, direction=None, magnitude=None, is_player=False):
-        self._is_player = is_player
-        self._direction = direction
-        self._magnitude = magnitude
+class InputEvent(Event):
+    def __init__(self, movement_vector=None, firing=False, auto_firing=False):
+        self._movement_vector = movement_vector
+        self._firing = firing
+        self._auto_firing = auto_firing
 
     def get_data(self):
         return {
-            'is_player': self._is_player,
-            'direction': self._direction,
-            'magnitude': self._magnitude,
+            'movement_vector': self._movement_vector,
+            'firing': self._firing,
+            'auto_firing': self._auto_firing,
         }
 
 
 class TickEvent(Event):
+    def __init__(self, ms_per_frame=None):
+        self._ms_per_frame = ms_per_frame
+
     def get_data(self):
-        pass
+        return {
+            'ms_per_frame': self._ms_per_frame,
+        }
 
 
 class QuitEvent(Event):

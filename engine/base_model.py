@@ -40,14 +40,15 @@ class Controllable(Movable):
         self._position = self._position + self._angle_vector * self._move_speed
 
     def update_angle(self, direction, magnitude):
-        # to prevent move cancellation, a special case is defined
+        # to prevent move cancellation when stopping, a special case is specified
+        #  for more robust movement
         if magnitude == STOP:
             if (direction == LEFT or direction == RIGHT) and \
-                    not (self._move_state[LEFT] or self._move_state[RIGHT]):
+                    self.is_already_moving_along_x():
                 self._angle_vector[X_AXIS] = magnitude
 
             elif (direction == UP or direction == DOWN) and \
-                    not (self._move_state[UP] or self._move_state[DOWN]):
+                    self.is_already_moving_along_y():
                 self._angle_vector[Y_AXIS] = magnitude
 
         else:
@@ -59,6 +60,12 @@ class Controllable(Movable):
 
     def set_move_state(self, direction):
         self._move_state[direction] = not self._move_state[direction]
+
+    def is_already_moving_along_x(self):
+        return not (self._move_state[LEFT] or self._move_state[RIGHT])
+
+    def is_already_moving_along_y(self):
+        return not (self._move_state[UP] or self._move_state[DOWN])
 
 
 class Projectile(object):
@@ -72,9 +79,9 @@ class Projectile(object):
 class Destructible(object):
     def __init__(self, hp=100, sp=0, max_hp=100, max_sp=0):
         self._health_points = hp
-        self._shield_points = sp
-
         self._max_hp = max_hp
+
+        self._shield_points = sp
         self._max_sp = max_sp
 
     def update_health_points(self, value, operation=1):
@@ -106,6 +113,5 @@ class Shooter(object):
         self._weapon = weapon
         self._bullet_type = bullet_type
 
-    def fire(self):
-        if self._weapon:
-            self._weapon.fire()
+    def fire(self, **kwargs):
+        raise NotImplementedError
