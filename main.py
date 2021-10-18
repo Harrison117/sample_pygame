@@ -21,7 +21,7 @@ def main():
     hp = 100
     sp = 0
     dmg = hp
-    weapon = None
+    weapon = Weapon(event_mgr)
     player = Player(
         event_mgr, hp, sp, dmg, weapon,
         pos=OrderedPair(0, 0), off=OrderedPair(0, 0), angle=OrderedPair(0, 0), mov_spd=3)

@@ -191,7 +191,7 @@ class Player(Entity):
 
     def fire(self, enemy_group):
         if self._weapon.firing():
-            self._weapon.fire(self._base_atk_spd, self._current_weapon_type)
+            self._weapon.fire_weapon(self._base_atk_spd, self._current_weapon_type)
 
         self._weapon.update_bullets_fired()
         self._weapon.check_bullet_collision(enemy_group)

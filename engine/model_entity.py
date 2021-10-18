@@ -10,10 +10,10 @@ class GameEntity(Listener):
         pass
 
     # event listener
-    def on_tick(self, e):
+    def on_tick(self, *e):
         raise NotImplementedError
 
-    def on_move(self, e):
+    def on_move(self, *e):
         raise NotImplementedError
 
 
@@ -29,13 +29,13 @@ class ShipEntity(GameEntity, Destructible, Projectile, Shooter):
         self._ship_type = ship_type
 
     # event listener
-    def on_tick(self, e):
+    def on_tick(self, *e):
         raise NotImplementedError
 
-    def on_move(self, e):
+    def on_move(self, *e):
         raise NotImplementedError
 
-    def fire(self, **kwargs):
+    def fire_weapon(self, **kwargs):
         raise NotImplementedError
 
 
@@ -48,46 +48,49 @@ class Player(ShipEntity, Controllable):
         super(Player, self).__init__(*ship_entity_properties, ship_category=ship_category, ship_type=ship_type)
 
         self._event_mgr.add(TickEvent, WeakBoundMethod(self.on_tick))
-        self._event_mgr.add(InputEvent, WeakBoundMethod(self.on_move))
+        self._event_mgr.add(InputEvent, WeakBoundMethod(self.on_input))
 
-    def fire(self, firing, auto_fire=False):
+    def fire_weapon(self, firing=False, auto_fire=False):
         if self._weapon:
-            self._weapon.fire(firing=firing, auto_fire=auto_fire)
+            self._weapon.set_auto_fire_state(auto_fire)
+            self._weapon.set_fire_state(firing)
 
         else:
-            print('cannot find weapon!')
+            print('Unable to fire: cannot find weapon!')
 
     def on_tick(self, e):
         self.update_position()
         self._event_mgr.post(UpdateSpritePosEvent(pos=self._position.get_tuple()))
 
-    def on_move(self, e):
+    def on_input(self, e):
         data = e.get_data()
         event = None
 
         if data:
-            # player_controlled = data['is_player']
-            movement_vector = data['movement_vector']
-            auto_firing = data['auto_firing']
-            firing = data['firing']
+            if data['movement_vector'] is not None:
+                self.on_move(data['movement_vector'])
 
-            if movement_vector:
-                direction, magnitude = list(movement_vector.items())[0]
-                self.set_move_state(direction)
-                self.update_angle(direction, magnitude)
-
-            else:
-                print(f'{data}')
-                print("direction/magnitude not found")
-
-            if firing or auto_firing:
-                self.fire(firing=firing, auto_fire=auto_firing)
+            if data['fire_state'] is not None:
+                self.on_fire(data['fire_state'])
 
         else:
-            print("data not found...")
+            pass
 
         if event:
             self._event_mgr.post(event)
+
+    def on_move(self, vector):
+        direction, magnitude = list(vector.items())[0]
+        self.set_move_state(direction)
+        self.update_angle(direction, magnitude)
+
+    def on_fire(self, fire_state):
+        # auto fire flag precedes over manual fire
+        # manual fire flag cancelling (side effect) is negligible
+        if fire_state[AUTO]:
+            self.fire_weapon(auto_fire=fire_state[AUTO])
+
+        self.fire_weapon(firing=fire_state[MANUAL])
 
 
 class BulletEntity(GameEntity, Movable, Projectile):
@@ -117,14 +120,15 @@ class BulletEntity(GameEntity, Movable, Projectile):
 
 
 class Weapon(Listener):
-    def __init__(self, event_mgr, atk_spd=0.0, atk_rate=1000, auto_fire=False,
+    def __init__(self, event_mgr, atk_spd=0.0, atk_rate=1000, firing=False, auto_firing=False,
                  bullet_factory=None):
         super(Weapon, self).__init__(event_mgr=event_mgr)
         self._attack_speed = atk_spd
         self._curr_attack_rate = atk_rate
         self._true_atk_rate = self._curr_attack_rate
         self._last_shot_tick = 0
-        self._is_firing = auto_fire
+        self._is_firing = firing
+        self._is_auto_firing = auto_firing
 
         self._bullet_factory = bullet_factory
         self._bullet_stack = list()
@@ -137,5 +141,13 @@ class Weapon(Listener):
     def fire(self, *args, **kwargs):
         pass
 
-    def set_fire_state(self, firing=False, auto_fire=False):
-        self._is_firing = (self._is_firing ^ auto_fire) or firing
+    def set_auto_fire_state(self, auto_fire):
+        self._is_auto_firing = self._is_auto_firing ^ auto_fire
+
+    def set_fire_state(self, firing):
+        # ignore manual fire flag
+        if self._is_auto_firing:
+            self._is_firing = self._is_auto_firing
+
+        else:
+            self._is_firing = firing

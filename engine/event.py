@@ -55,16 +55,14 @@ class UpdateSpritePosEvent(Event):
 
 
 class InputEvent(Event):
-    def __init__(self, movement_vector=None, firing=False, auto_firing=False):
+    def __init__(self, movement_vector=None, fire_state=None):
         self._movement_vector = movement_vector
-        self._firing = firing
-        self._auto_firing = auto_firing
+        self._fire_state = fire_state
 
     def get_data(self):
         return {
             'movement_vector': self._movement_vector,
-            'firing': self._firing,
-            'auto_firing': self._auto_firing,
+            'fire_state': self._fire_state,
         }
 
 

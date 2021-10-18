@@ -32,8 +32,8 @@ class Status(Enum):
     ATK_DOWN = 7
 
 
-LEFT = 1
-RIGHT = 2
+LEFT = MANUAL = 1
+RIGHT = AUTO = 2
 UP = 3
 DOWN = 4
 

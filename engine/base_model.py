@@ -40,31 +40,38 @@ class Controllable(Movable):
         self._position = self._position + self._angle_vector * self._move_speed
 
     def update_angle(self, direction, magnitude):
-        # to prevent move cancellation when stopping, a special case is specified
-        #  for more robust movement
+        # to prevent move cancellation when stopping, a special case is defined
         if magnitude == STOP:
-            if (direction == LEFT or direction == RIGHT) and \
-                    self.is_already_moving_along_x():
+            if self._moving_along_x(direction) and \
+                    self.already_moving_along_x_axis():
                 self._angle_vector[X_AXIS] = magnitude
 
-            elif (direction == UP or direction == DOWN) and \
-                    self.is_already_moving_along_y():
+            elif self._moving_along_y(direction) and \
+                    self.already_moving_along_y_axis():
                 self._angle_vector[Y_AXIS] = magnitude
 
         else:
-            if direction == LEFT or direction == RIGHT:
+            if self._moving_along_x(direction):
                 self._angle_vector[X_AXIS] = magnitude
 
-            elif direction == UP or direction == DOWN:
+            elif self._moving_along_y(direction):
                 self._angle_vector[Y_AXIS] = magnitude
 
     def set_move_state(self, direction):
         self._move_state[direction] = not self._move_state[direction]
 
-    def is_already_moving_along_x(self):
+    @staticmethod
+    def _moving_along_x(direction):
+        return direction == LEFT or direction == RIGHT
+
+    def already_moving_along_x_axis(self):
         return not (self._move_state[LEFT] or self._move_state[RIGHT])
 
-    def is_already_moving_along_y(self):
+    @staticmethod
+    def _moving_along_y(direction):
+        return direction == UP or direction == DOWN
+
+    def already_moving_along_y_axis(self):
         return not (self._move_state[UP] or self._move_state[DOWN])
 
 
@@ -113,5 +120,5 @@ class Shooter(object):
         self._weapon = weapon
         self._bullet_type = bullet_type
 
-    def fire(self, **kwargs):
+    def fire_weapon(self, **kwargs):
         raise NotImplementedError
