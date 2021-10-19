@@ -35,7 +35,7 @@ class KeyboardController(Listener):
                     event = InputEvent(
                         movement_vector={DOWN: DOWN_MAGNITUDE})
                 elif pygame_event.key == K_SPACE:
-                    event = InputEvent(fire_state={MANUAL: True, AUTO: False})
+                    event = InputEvent(fire_state={MANUAL: True})
                 elif pygame_event.key == K_c:
                     event = InputEvent(fire_state={AUTO: True})
 
@@ -53,7 +53,7 @@ class KeyboardController(Listener):
                     event = InputEvent(
                         movement_vector={DOWN: STOP})
                 elif pygame_event.key == K_SPACE:
-                    event = InputEvent(fire_state={MANUAL: False, AUTO: False})
+                    event = InputEvent(fire_state={MANUAL: False})
 
             if event:
                 self._event_mgr.post(event)

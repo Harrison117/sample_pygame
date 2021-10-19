@@ -35,6 +35,9 @@ class ShipEntity(GameEntity, Destructible, Projectile, Shooter):
     def on_move(self, *e):
         raise NotImplementedError
 
+    def on_fire(self, *e):
+        raise NotImplementedError
+
     def fire_weapon(self, **kwargs):
         raise NotImplementedError
 
@@ -52,7 +55,8 @@ class Player(ShipEntity, Controllable):
 
     def fire_weapon(self, firing=False, auto_fire=False):
         if self._weapon:
-            self._weapon.set_auto_fire_state(auto_fire)
+            if auto_fire:
+                self._weapon.set_auto_fire_state(auto_fire)
             self._weapon.set_fire_state(firing)
 
         else:
@@ -85,12 +89,10 @@ class Player(ShipEntity, Controllable):
         self.update_angle(direction, magnitude)
 
     def on_fire(self, fire_state):
-        # auto fire flag precedes over manual fire
-        # manual fire flag cancelling (side effect) is negligible
-        if fire_state[AUTO]:
+        if AUTO in fire_state:
             self.fire_weapon(auto_fire=fire_state[AUTO])
-
-        self.fire_weapon(firing=fire_state[MANUAL])
+        else:
+            self.fire_weapon(firing=fire_state[MANUAL])
 
 
 class BulletEntity(GameEntity, Movable, Projectile):
@@ -145,7 +147,6 @@ class Weapon(Listener):
         self._is_auto_firing = self._is_auto_firing ^ auto_fire
 
     def set_fire_state(self, firing):
-        # ignore manual fire flag
         if self._is_auto_firing:
             self._is_firing = self._is_auto_firing
 

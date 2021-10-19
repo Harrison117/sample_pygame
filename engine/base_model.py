@@ -43,11 +43,11 @@ class Controllable(Movable):
         # to prevent move cancellation when stopping, a special case is defined
         if magnitude == STOP:
             if self._moving_along_x(direction) and \
-                    self.already_moving_along_x_axis():
+                    self._already_moving_along_x_axis():
                 self._angle_vector[X_AXIS] = magnitude
 
             elif self._moving_along_y(direction) and \
-                    self.already_moving_along_y_axis():
+                    self._already_moving_along_y_axis():
                 self._angle_vector[Y_AXIS] = magnitude
 
         else:
@@ -64,14 +64,14 @@ class Controllable(Movable):
     def _moving_along_x(direction):
         return direction == LEFT or direction == RIGHT
 
-    def already_moving_along_x_axis(self):
+    def _already_moving_along_x_axis(self):
         return not (self._move_state[LEFT] or self._move_state[RIGHT])
 
     @staticmethod
     def _moving_along_y(direction):
         return direction == UP or direction == DOWN
 
-    def already_moving_along_y_axis(self):
+    def _already_moving_along_y_axis(self):
         return not (self._move_state[UP] or self._move_state[DOWN])
 
 
