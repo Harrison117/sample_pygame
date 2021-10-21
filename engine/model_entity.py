@@ -96,7 +96,8 @@ class Player(ShipEntity, Controllable):
 
 
 class BulletEntity(GameEntity, Movable, Projectile):
-    def __init__(self, event_mgr, dmg,
+    def __init__(self, event_mgr,
+                 dmg=0.0,
                  **movable_properties):
         GameEntity.__init__(self, event_mgr=event_mgr)
         Movable.__init__(self, **movable_properties)
@@ -121,6 +122,7 @@ class BulletEntity(GameEntity, Movable, Projectile):
         raise NotImplementedError
 
 
+# todo decompose; base classes potentially exists
 class Weapon(Listener):
     def __init__(self, event_mgr, atk_spd=0.0, atk_rate=1000, firing=False, auto_firing=False,
                  bullet_factory=None):

@@ -1,20 +1,23 @@
+from typing import Dict, Any
 from util.enums import *
-from helper.helper import *
+from data_struct import OrderedPair
 
 
 class Static(object):
     def __init__(self,
-                 pos=OrderedPair(0, 0).get_tuple(),
-                 off=OrderedPair(0, 0).get_tuple()):
+                 pos: OrderedPair = OrderedPair(0, 0).get_tuple(),
+                 off: OrderedPair = OrderedPair(0, 0).get_tuple()):
+        # todo director will dictate the actual params; default to None
         self._position = pos
         self._offset = off
 
 
 class Movable(Static):
     def __init__(self,
-                 angle=OrderedPair(0, 0).get_tuple(),
-                 mov_spd=0,
+                 angle: OrderedPair = OrderedPair(0, 0).get_tuple(),
+                 mov_spd: int = 0,
                  **static_properties):
+        # todo director will dictate the actual params; default to None
         super(Movable, self).__init__(**static_properties)
         self._angle_vector = angle
         self._move_speed = mov_spd
@@ -27,8 +30,12 @@ class Movable(Static):
 
 
 class Controllable(Movable):
-    def __init__(self, **movable_properties):
+    def __init__(self,
+                 move_state: Dict[Enum, bool] = None,
+                 **movable_properties):
         super(Controllable, self).__init__(**movable_properties)
+        # todo director will dictate the actual params; default to None
+        # self._move_state = move_state
         self._move_state = {
             LEFT: False,
             RIGHT: False,
@@ -84,7 +91,14 @@ class Projectile(object):
 
 
 class Destructible(object):
-    def __init__(self, hp=100, sp=0, max_hp=100, max_sp=0):
+    def __init__(self,
+                 hp: int = 100,
+                 sp: int = 0,
+                 max_hp: int = 100,
+                 max_sp: int = 0,):
+        # todo director will dictate the actual params; default to None
+        # todo realistically, not all entities have shields; separate
+        #   shield functionality
         self._health_points = hp
         self._max_hp = max_hp
 
@@ -116,7 +130,9 @@ class Destructible(object):
 
 
 class Shooter(object):
-    def __init__(self, weapon=None, bullet_type=None):
+    def __init__(self,
+                 weapon: Any = None,
+                 bullet_type: Enum = None):
         self._weapon = weapon
         self._bullet_type = bullet_type
 

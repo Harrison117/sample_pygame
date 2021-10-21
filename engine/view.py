@@ -1,6 +1,6 @@
 import pygame
 from engine.event import *
-from helper.helper import WeakBoundMethod
+from engine.helper import WeakBoundMethod
 
 
 class PygameWindow(Listener):

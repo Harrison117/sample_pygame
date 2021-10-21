@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from helper.helper import WeakBoundMethod
+from engine.helper import WeakBoundMethod
 from util.enums import *
 from engine.event import *
 
