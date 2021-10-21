@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from util.enums import *
-from data_struct import OrderedPair
+from engine.data_struct import OrderedPair
 
 
 class Static(object):

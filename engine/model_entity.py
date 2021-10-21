@@ -1,5 +1,6 @@
 from engine.event import *
 from engine.base_model import *
+from engine.helper import *
 
 
 class GameEntity(Listener):
