@@ -1,6 +1,7 @@
 from enum import Enum
 
 
+# todo if possible, transfer Enums to respective classes as static variables
 class WeaponType(Enum):
     NONE = 0
     BASIC = 1
@@ -17,7 +18,7 @@ class ShipType(Enum):
 
 
 class EntityCategory(Enum):
-    MECH = 0
+    MECHANICAL = 0
     NATURE = 1
 
 
